@@ -1,0 +1,16 @@
+===== Immediate Generator Test =====
+I-type addi imm = fffffffffffffffc
+I-type andi imm = 0000000000000007
+S-type sd imm = 0000000000000008
+B-type beq imm = 0000000000000010
+Shift slli imm = 0000000000000003
+testbench.sv:34: $finish called at 5 (1s)
+Done 
+
+
+===== Register File Test =====
+x1 = deadbeefcafebabe, x0 = 0000000000000000
+x0 = 0000000000000000, x1 = deadbeefcafebabe
+x5 = 123456789abcdef0, x1 = deadbeefcafebabe
+testbench.sv:45: $finish called at 33 (1s)
+Done
