@@ -14,9 +14,12 @@ module CUpALUControl (
 );
 
     always @(*) begin
+        RegWrite = 0; MemRead = 0; MemWrite = 0; ALUSrc = 0;
+        MemToReg = 0; Branch = 0; Jump = 0; ALUControl = 4'b1111;
+        //default to avoid latches
         case(opcode)
         //rtype
-            7'b0000000: begin 
+            7'b0110011: begin 
                 RegWrite = 1; 
                 case(funct3)
                     3'b000: ALUControl = (funct7==7'b0100000) ? 4'b0011 : 4'b0010; // sub=3/add=2
@@ -29,7 +32,7 @@ module CUpALUControl (
                 endcase
             end
         //itype
-            7'b0000001: begin
+            7'b0010011: begin
                 RegWrite = 1;
                 ALUSrc   = 1;
                 case(funct3)
@@ -43,7 +46,7 @@ module CUpALUControl (
                 endcase
             end
             //lw
-            7'b0000010: begin
+            7'b0000011: begin
                 RegWrite = 1;
                 MemRead = 1;
                 ALUSrc = 1;
@@ -52,26 +55,26 @@ module CUpALUControl (
             end
 
             //sw
-            7'b0000011: begin
+            7'b0100011: begin
                 MemWrite = 1;
                 ALUSrc = 1;
                 ALUControl = 4'b0010; //add(Address calc brdo)
             end
 
             //beq/bne
-            7'b0000100: begin
+            7'b1100011: begin
                 Branch = 1;
                 ALUControl = 4'b0011; //sub(comp)
             end
 
             //jal
-            7'b0000101: begin
+            7'b1101111: begin
                 RegWrite=1;
                 Jump=1;
             end
 
             //jalr
-            7'b0000110: begin
+            7'b1101111: begin
                 RegWrite = 1;
                 ALUSrc = 1; 
                 Jump = 1;

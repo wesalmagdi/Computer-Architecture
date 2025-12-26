@@ -1,64 +1,62 @@
 module CUpALUControl_tb;
 
-    reg [63:0] A;
-    reg [63:0] B;
-    reg [3:0] ALUctl;
+    reg [6:0] opcode;
+    reg [2:0] funct3;
+    reg [6:0] funct7;
 
-    wire [63:0] ALUOut;
-    wire Zero;
+    wire RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump;
+    wire [3:0] ALUControl;
 
     CUpALUControl cu_alu(
-        ALUctl,
-        A,
-        B,
-        ALUOut,
-        Zero
+        opcode,
+        funct3,
+        funct7,
+        RegWrite,
+        MemRead,
+        MemWrite,
+        ALUSrc,
+        MemToReg,
+        Branch,
+        Jump,
+        ALUControl
     );
 
     initial begin
-        $display("--------------------------------------testbench ----------------------------");
+        $display("--------------------------------------------------------------------------------");
+        $display("Instr  | Opcode  | f3 | f7      | RW MR MW AS M2R Br Jp | ALUctl");
+        $display("--------------------------------------------------------------------------------");
 
-        ALUctl = 4'b0000; //and
-        A=64'hFFFF_FFFF_FFFF_FFFF, B=64'hFFFF_FFFF_FFFF_FFFF;
-        #1;
-        $display("AND: A=%h B=%h ALUOut=%h Zero=%b", A, B, ALUOut, Zero);
+        //rtype instructions
+        opcode = 7'b0110011; 
+        funct3 = 3'b000; funct7 = 7'b0000000; #10; $display("add    | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b000; funct7 = 7'b0100000; #10; $display("subtract    | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b111; funct7 = 7'b0000000; #10; $display("and    | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b110; funct7 = 7'b0000000; #10; $display("or     | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b100; funct7 = 7'b0000000; #10; $display("xor    | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b001; funct7 = 7'b0000000; #10; $display("sll    | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b101; funct7 = 7'b0000000; #10; $display("srl    | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b101; funct7 = 7'b0100000; #10; $display("sra    | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
 
-        ALUctl = 4'b0001; //or
-        A=64'hF0F0_F0F0_F0F0_F0F0, B=64'h0F0F_0F0F_0F0F_0F0F;
-        #1;
-        $display("OR: A=%h B=%h ALUOut=%h Zero=%b", A, B, ALUOut, Zero);
+        //itype instructions
+        opcode = 7'b0010011; 
+        funct3 = 3'b000; #10; $display("addi   | %b | %b| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b111; #10; $display("andi   | %b | %b| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b110; #10; $display("ori    | %b | %b| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b100; #10; $display("xori   | %b | %b| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b001; funct7 = 7'b0000000; #10; $display("slli   | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b101; funct7 = 7'b0000000; #10; $display("srli   | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        funct3 = 3'b101; funct7 = 7'b0100000; #10; $display("srai   | %b | %b| %b | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, funct7, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
 
-        ALUctl = 4'b0010; //add
-        A=64'h0000_0000_0000_0005, B=64'h0000_0000_0000_0003;
-        #1;
-        $display("ADD: A=%h B=%h ALUOut=%h Zero=%b", A, B, ALUOut, Zero);
+        //load and store instructions
+        opcode = 7'b0000011; funct3 = 3'b010; #10; $display("lw     | %b | %b| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        opcode = 7'b0100011; funct3 = 3'b010; #10; $display("sw     | %b | %b| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
 
-        ALUctl = 4'b0011; //sub
-        A=64'h0000_0000_0000_0005, B=64'h0000_0000_0000_0003;
-        #1;
-        $display("SUB: A=%h B=%h ALUOut=%h Zero=%b", A, B, ALUOut, Zero);
-
-        ALUctl = 4'b0100; //xor
-        A=64'hFFFF_0000_FFFF_0000, B=64'h0F0F_0F0F_0F0F_0F0F;
-        #1;
-        $display("XOR: A=%h B=%h ALUOut=%h Zero=%b", A, B, ALUOut, Zero);
-
-        ALUctl = 4'b0101; //sll
-        A=64'h0000_0000_0000_0001, B=64'h0000_0000_0000_0003; 
-        #1;
-        $display("SLL: A=%h B=%h ALUOut=%h Zero=%b", A, B, ALUOut, Zero);
-
-        ALUctl = 4'b0111; //srl
-        A=64'h0000_0000_0000_0080, B=64'h0000_0000_0000_0003;
-        #1;
-        $display("SRL: A=%h B=%h ALUOut=%h Zero=%b", A, B, ALUOut, Zero);
-
-        ALUctl = 4'b0110; //sra
-        A=64'hFFFF_FFFF_FFFF_FFF0, B=64'h0000_0000_0000_0002;
-        #1;
-        $display("SRA: A=%h B=%h ALUOut=%h Zero=%b", A, B, ALUOut, Zero);
+        //branch and jump instructions
+        opcode = 7'b1100011; funct3 = 3'b000; #10; $display("beq    | %b | %b| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        opcode = 7'b1100011; funct3 = 3'b001; #10; $display("bne    | %b | %b| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        opcode = 7'b1101111; #10; $display("jal    | %b | ---| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
+        opcode = 7'b1100111; funct3 = 3'b000; #10; $display("jalr   | %b | %b| ------- | %b  %b  %b  %b   %b   %b  %b | %b", opcode, funct3, RegWrite, MemRead, MemWrite, ALUSrc, MemToReg, Branch, Jump, ALUControl);
 
         $finish;
     end
-
 endmodule
