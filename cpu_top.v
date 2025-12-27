@@ -48,7 +48,9 @@ module cpu_top(
 
     // --- Immediate Generator ---
     wire [63:0] imm;
-    ImmGen IMM(.instr(instr), .imm(imm));
+    ImmGen IMM(
+        .instr(instr), 
+        .imm(imm));
 
 
     // --- ALU ---
