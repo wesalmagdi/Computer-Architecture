@@ -1,23 +1,36 @@
 `timescale 1ns/1ps
+
 module cpu_top_tb;
-    reg clk = 0;
-    reg rst = 1;
+
+    // Clock and reset signals
+    reg clk;
+    reg rst;
 
     // Instantiate the CPU
-    cpu_top cpu(.clk(clk), .rst(rst));
+    cpu_top CPU (
+        .clk(clk),
+        .rst(rst)
+    );
 
-    // Clock generation
-    always #5 clk = ~clk;
-
+    // Clock generation: 10ns period (100MHz)
     initial begin
-        // Reset pulse
-        #10 rst = 0;
+        clk = 0;
+        forever #5 clk = ~clk;
+    end
+
+    // Test sequence
+    initial begin
+        // Initialize reset
+        rst = 1;
+        #20;        // hold reset for 20 ns
+        rst = 0;
 
         // Run simulation for 200 ns
-        #200 $finish;
+        #200;
+
+        // Finish simulation
+        $finish;
     end
 
-    initial begin
-        $monitor("Time=%0t PC=%0d", $time, cpu.PC);
-    end
 endmodule
+
