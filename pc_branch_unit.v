@@ -3,18 +3,18 @@ module pc_branch_unit (
     input  wire        reset,
     input  wire        branch,        // Branch control signal
     input  wire        zero,          // ALU Zero flag
-    input  wire [31:0] pc_current,    // Current PC
-    input  wire [31:0] imm_ext,       // Sign-extended immediate
-    output reg  [31:0] pc_next        // Updated PC
+    input  wire [63:0] pc_current,    // Current PC
+    input  wire [63:0] imm_ext,       // Sign-extended immediate
+    output reg  [63:0] pc_next        // Updated PC
 );
 
     // PC + 4
-    wire [31:0] pc_plus4;
+    wire [63:0] pc_plus4;
     assign pc_plus4 = pc_current + 32'd4;
 
     // Branch target: PC + (signext(offset) << 1)
     // Change <<1 to <<2 if using MIPS-style addressing
-    wire [31:0] branch_target;
+    wire [63:0] branch_target;
     assign branch_target = pc_plus4 + (imm_ext << 1);
 
     // Branch decision logic

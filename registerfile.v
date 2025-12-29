@@ -7,6 +7,11 @@ module RegisterFile(
 );
 
     reg [63:0] regs [31:0];
+    integer i;
+    initial begin
+        for (i = 0; i < 32; i = i + 1)
+            regs[i] = 64'b0;
+    end
 
     // Asynchronous read
     assign rd1 = (rs1 == 0) ? 64'd0 : regs[rs1];
