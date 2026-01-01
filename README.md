@@ -14,11 +14,12 @@ This project involves the development of a functional architecture (likely MIPS,
 * **Simulation:** [Vivado]
 * **Architecture:** [64-bit RIS]
 
-## 📁 Key Components
-* `/src`: Contains the source code for the hardware modules.
-* `/testbench`: Scripts and files used to verify the logic of the design.
-* `/docs`: Documentation regarding the instruction set and schematics.
+## 📂 Project Structure
+The repository is organized by individual module files and their corresponding testbenches. Each file is named based on the component and the contributor responsible for its design:
 
+* **Component Files:** Implementation of the ALU, Control Unit, Register File, and Datapath logic.
+* **Testbench Files:** Verification scripts to test the logic of each specific hardware module.
+* **Documentation:** Schematics and technical reports are located in the main directory or specific docs files.
 
 
 ## 📊 Instruction Set Architecture (ISA)
@@ -26,6 +27,7 @@ This architecture supports the following instruction types:
 - **R-Type:** Arithmetic operations (ADD, SUB, etc.)
 - **I-Type:** Immediate operations and memory access (LW, SW)
 - **J-Type:** Control flow (JUMP, BEQ)
+- **S-Type:** Memory Stores (SD)
 
 ## 🤝 Contributors
 * **Wesal Magdi** - Core Contributor
