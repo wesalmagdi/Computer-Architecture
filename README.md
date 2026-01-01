@@ -28,8 +28,11 @@ This architecture supports the following instruction types:
 - **J-Type:** Control flow (JUMP, BEQ)
 
 ## 🤝 Contributors
-* **Wesal Magdi** - Project Lead/Creator
-* **[Your Name]** - Core Contributor
+* **Wesal Magdi** - Core Contributor
+* **Rama Mohamed** - Core Contributor
+* **Rana Osman** - Core Contributor
+* **Lina Ashraf** - Core Contributor
+* **Raneem khaled** - Core Contributor
 
 ---
 *This project was developed as part of the Computer Architecture course.*
